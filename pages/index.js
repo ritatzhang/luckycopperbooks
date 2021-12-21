@@ -95,4 +95,6 @@ how to add an image to mdx:
     height={500}
     src="https://www.nasa.gov/sites/default/files/1-bluemarble_west.jpg"
   />
+
+  npm run dev
 */
