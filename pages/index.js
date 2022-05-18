@@ -5,8 +5,13 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
+import React, { useState, useEffect } from "react";
+// import Axios from "axios"
+// import * as JsSearch from "js-search"
 
 export default function Home({ posts }) {
+  const [entry, setEntry] = useState("");
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,28 +22,19 @@ export default function Home({ posts }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>lucky copper 瑞铜 books</h1>
-
         <p className={styles.description}>
           i am a student who likes reading books--mainly young adult fiction{" "}
           <br /> (i am trying my best to branch out to adult fiction as well
           though!).
         </p>
-
-        <div className={styles.grid}>
-          {posts.map((post) => {
-            const { cover_url, title, path, date } = post;
-            console.log(cover_url);
-            return (
-              <Link key={path} href={path}>
-                <a className={styles.card}>
-                  <Image width={532} height={800} alt={title} src={cover_url} />
-                  <h3>{title}</h3>
-                  <p>{date}</p>
-                </a>
-              </Link>
-            );
-          })}
-        </div>
+        <input
+          id="inputbox"
+          className={styles.inputbox}
+          type="text"
+          placeholder="search for a book here!"
+          onChange={(e) => setEntry(e.target.value)}
+        ></input>
+        <SearchItems posts={posts} search={entry} />
       </main>
 
       <footer className={styles.footer}>
@@ -68,12 +64,13 @@ export async function getStaticProps() {
   );
 
   const posts = files.map((file) => {
-    console.log(file.matter.data);
+    // console.log("hello"); // prints in terminal
     return {
       path: `/posts/${file.filename.replace(".mdx", "")}`,
       title: file.matter.data.title,
       date: file.matter.data.date,
       cover_url: file.matter.data.cover_url,
+      author: file.matter.data.author,
     };
   });
 
@@ -82,6 +79,38 @@ export async function getStaticProps() {
       posts,
     },
   };
+}
+
+function SearchItems(props) {
+  // const [entry, setEntry] = useState("");
+
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   setEntry(document.getElementById("inputbox").value);
+  //   console.log("check");
+  //   // document.title = `You clicked ${count} times`;
+  // });
+  console.log(props.search);
+
+  return (
+    <div className={styles.grid}>
+      {props.posts.map((post) => {
+        const { cover_url, title, path, date, author } = post;
+
+        if (title.includes(props.search) || author.includes(props.search)) {
+          return (
+            <Link key={path} href={path}>
+              <a className={styles.card}>
+                <Image width={532} height={800} alt={title} src={cover_url} />
+                <h3>{title}</h3>
+                <p>{date}</p>
+              </a>
+            </Link>
+          );
+        }
+      })}
+    </div>
+  );
 }
 
 /*

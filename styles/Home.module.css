@@ -122,3 +122,12 @@
   padding: 2em;
   font-size: 18px;
 }
+
+.inputbox {
+  padding: 16px 20px;
+  border: none;
+  display: block;
+  width: 45%;
+  height: 40px;
+  font-size: 14pt;
+}
